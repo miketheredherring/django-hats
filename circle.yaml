@@ -1,0 +1,12 @@
+machine:
+  python:
+    version: 2.7.10
+
+dependencies:
+  override:
+    - pip install tox
+    - pip install coveralls
+
+test:
+  override:
+    - tox
