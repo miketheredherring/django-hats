@@ -25,12 +25,14 @@ class Bootstrapper(object):
     # Returns the True if Role is added, None if it already exists
     @classmethod
     def register(cls, role_class):
-        name = role_class.__name__.lower()
+        name = role_class.get_slug()
 
         # Make sure we haven't registered the Role already
         if name not in cls._available_roles:
             cls._available_roles[name] = role_class
             return True
+        else:
+            raise ValueError('Role with name `%s` is already registered. Consider defining Meta.name to disambiguate.' % name)
 
     # Returns a list of available Roles
     @classmethod
