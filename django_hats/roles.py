@@ -1,5 +1,6 @@
 import six
 
+from django.contrib.auth.models import Group
 from django_hats.bootstrap import Bootstrapper
 
 
@@ -24,6 +25,36 @@ class RoleMetaClass(type):
 
 
 class Role(six.with_metaclass(RoleMetaClass)):
+    # Returns a list of Users associated with this Role
+    @classmethod
+    def get_users(cls):
+        group = cls.get_group()
+        return group.user_set.all()
+
+    # Returns the individual Group associated with this Role
+    @classmethod
+    def get_group(cls):
+        group, _ = Group.objects.get_or_create(name='_role_%s' % cls.get_slug())
+        return group
+
+    # Returns a list of Permissions associated with this Role
+    @classmethod
+    def get_permissions(cls):
+        permissions = cls.get_group().permissions.all()
+        return permissions
+
+    # Does the necessary assignment of Groups/Permissions to the User in question
+    @classmethod
+    def assign(cls, user):
+        group = cls.get_group()
+        user.groups.add(group)
+
+    # Does the necessary removal of Groups/Permissions to the User in question
+    @classmethod
+    def remove(cls, user):
+        group = cls.get_group()
+        user.groups.remove(group)
+
     # Returns a unique identifier for the Role name
     @classmethod
     def get_slug(cls):

@@ -13,7 +13,10 @@ class BadRole(object):
 
 class BootstrapTestCases(TestCase):
     def test_register(self):
-        self.assertEqual(Bootstrapper.get_roles(), [Scientist, BadlyNamedModel])
+        roles = Bootstrapper.get_roles()
+        expected_roles = [Scientist, BadlyNamedModel]
+        for role in expected_roles:
+            self.assertTrue(role in roles)
 
     def test_register_multiple(self):
         self.assertRaises(ValueError, Bootstrapper.register, BadRole)
