@@ -25,6 +25,11 @@ class RoleMetaClass(type):
 
 
 class Role(six.with_metaclass(RoleMetaClass)):
+    # Returns True if the User is a member of this Role, else False
+    @classmethod
+    def check_membership(cls, user):
+        return user.groups.filter(id=cls.get_group().id).exists()
+
     # Returns a list of Users associated with this Role
     @classmethod
     def get_users(cls):

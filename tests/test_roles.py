@@ -13,7 +13,7 @@ class BadRole(object):
         return 'scientist'
 
 
-class BootstrapTestCases(TestCase):
+class RoleTestCases(TestCase):
     # Tests `django_hats.roles.Role.get_group()`
     def test_get_group(self):
         self.assertEqual(Scientist.get_group().name, '_role_scientist')
@@ -47,3 +47,10 @@ class BootstrapTestCases(TestCase):
         self.assertEqual(Scientist.get_users().count(), 1)
         Scientist.remove(user)
         self.assertEqual(Scientist.get_users().count(), 0)
+
+    # Tests `django_hats.roles.Role.check_membership()`
+    def test_check_membership(self):
+        user = User.objects.create(username='tester')
+        self.assertFalse(Scientist.check_membership(user))
+        Scientist.assign(user)
+        self.assertTrue(Scientist.check_membership(user))
