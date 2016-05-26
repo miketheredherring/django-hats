@@ -1,39 +1,42 @@
 import re
 
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.models import ContentType
 
 from django_hats.bootstrap import Bootstrapper
 
 
-def synchronize_roles():
-    # Get a list of the existing Roles in the system
-    valid_roles = Bootstrapper.get_roles()
+def cleanup_roles():
+    roles = Bootstrapper.get_roles()
 
-    # Check if the role exists in the database
-    roles = Group.objects.filter(
+    # Get stale Roles
+    stale_roles = Group.objects.filter(
         name__istartswith='_role_'
     ).exclude(
-        id__in=[role.get_group().id for role in valid_roles]
+        id__in=[role.get_group().id for role in roles]
     )
 
-    objs = []
-    # Go through all of the permissions on the groups and see if they are being used elsewhere
-    # Otherwise delete them.
+    perms_to_remove = []
+    # Check if a permission should be revoked for a group
     for role in roles:
-        for perm in role.permissions.all():
-            if perm.group_set.exclude(id=role.id).exists() is False:
-                objs.append(perm)
-                perm.delete()
+        for perm in role.get_permissions():
+            if perm.codename not in role._meta.permissions:
+                perms_to_remove.append(perm)
+    role.remove_permissions(*perms_to_remove)
 
     # Delete all the roles at the end
-    objs.extend(roles)
-    roles.delete()
+    stale_roles.delete()
+
+    return stale_roles
+
+
+def synchronize_roles(roles):
+    # Ensure the ContentType exists
+    ContentType.objects.get_or_create(app_label='roles', model='role')
 
     # Create all of the new Groups
-    for role in valid_roles:
-        role.get_group()
-
-    return objs
+    for role in roles:
+        role.synchronize()
 
 
 def snake_case(name):

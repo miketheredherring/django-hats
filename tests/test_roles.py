@@ -1,4 +1,7 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
+from django.core.management import call_command
 from django.test import TestCase
 
 from tests.roles import GeneticCounselor, Scientist
@@ -55,3 +58,19 @@ class RoleTestCases(TestCase):
         self.assertFalse(Scientist.check_membership(user))
         Scientist.assign(user)
         self.assertTrue(Scientist.check_membership(user))
+
+    # Tests `django_hats.roles.Role.add_permissions()`
+    def test_add_permissions(self):
+        perm = Permission.objects.create(
+            codename='temp',
+            name='Temporary',
+            content_type=ContentType.objects.get_for_model(User)
+        )
+        Scientist.add_permissions(perm)
+        self.assertTrue(perm in Scientist.get_permissions())
+
+    # Tests `django_hats.roles.Role.synchronize()`
+    def test_synchronize(self):
+        call_command('synchronize_roles')
+        perm = Permission.objects.get(codename='change_user')
+        self.assertTrue(perm in Scientist.get_permissions())

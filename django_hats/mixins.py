@@ -28,8 +28,6 @@ class RoleRequiredMixin(PermissionRequiredMixin):
             _role_perms = _role_perms & role.get_permissions()
         perms = [perm.codename for perm in _role_perms]
 
-        print perms
-
         # Have permissions be defined already?
         try:
             perms = perms + super(RoleRequiredMixin, self).get_permission_required()

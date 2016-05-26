@@ -28,7 +28,7 @@ from django_hats.roles import Role
 
 class Scientist(Role):
     class Meta:
-        pass
+        permissions = ('change_subject', 'change_specimen')
 
 class GeneticCounselor(Role):
     pass

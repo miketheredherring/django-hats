@@ -1,6 +1,6 @@
 import six
 
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 
 from django_hats.bootstrap import Bootstrapper
 from django_hats.utils import snake_case
@@ -15,6 +15,7 @@ class RoleMetaClass(type):
         # Check if the Role is registered in the global namespace
         if bases and Role in bases:
             super_new._meta = type('Meta', (), {})
+            super_new._meta.permissions = ()
             # Extract potential Meta information from super
             if hasattr(super_new, 'Meta'):
                 for attr in [attr for attr in dir(super_new.Meta) if not callable(attr) and not attr.startswith('__')]:
@@ -27,6 +28,16 @@ class RoleMetaClass(type):
 
 
 class Role(six.with_metaclass(RoleMetaClass)):
+    # Adds the specified permission(s) to the Role
+    @classmethod
+    def add_permissions(cls, *args):
+        cls.get_group().permissions.add(*args)
+
+    # Adds the specified permission(s) to the Role
+    @classmethod
+    def remove_permissions(cls, *args):
+        cls.get_group().permissions.remove(*args)
+
     # Returns True if the User is a member of this Role, else False
     @classmethod
     def check_membership(cls, user):
@@ -66,6 +77,14 @@ class Role(six.with_metaclass(RoleMetaClass)):
     @classmethod
     def get_slug(cls):
         return (getattr(cls._meta, 'name', None) or snake_case(cls.__name__)).lower()
+
+    # Synchronizes the Role with the database
+    @classmethod
+    def synchronize(cls):
+        # Adds all of the permissions to the Role
+        cls.add_permissions(
+            *Permission.objects.filter(codename__in=cls._meta.permissions)
+        )
 
 
 class RoleFinder(object):

@@ -2,7 +2,8 @@ from django_hats.roles import Role
 
 
 class Scientist(Role):
-    pass
+    class Meta:
+        permissions = ('change_user', )
 
 
 class GeneticCounselor(Role):
