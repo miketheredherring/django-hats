@@ -1,7 +1,9 @@
 import six
 
 from django.contrib.auth.models import Group
+
 from django_hats.bootstrap import Bootstrapper
+from django_hats.utils import snake_case
 
 
 class RoleMetaClass(type):
@@ -63,7 +65,7 @@ class Role(six.with_metaclass(RoleMetaClass)):
     # Returns a unique identifier for the Role name
     @classmethod
     def get_slug(cls):
-        return (getattr(cls._meta, 'name', None) or cls.__name__).lower()
+        return (getattr(cls._meta, 'name', None) or snake_case(cls.__name__)).lower()
 
 
 class RoleFinder(object):

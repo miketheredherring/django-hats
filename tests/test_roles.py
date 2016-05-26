@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from tests.roles import Scientist
+from tests.roles import Scientist, BadlyNamedModel
 
 # Assign the User model for shortcut purposes
 User = get_user_model()
@@ -17,6 +17,7 @@ class RoleTestCases(TestCase):
     # Tests `django_hats.roles.Role.get_group()`
     def test_get_group(self):
         self.assertEqual(Scientist.get_group().name, '_role_scientist')
+        self.assertEqual(BadlyNamedModel.get_group().name, '_role_good_model_name')
 
     # Tests `django_hats.roles.Role.get_permissions()`
     def test_get_permissions(self):
