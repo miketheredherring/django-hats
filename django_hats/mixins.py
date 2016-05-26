@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.models import Permission
 from django.core.exceptions import ImproperlyConfigured
 
 from django_hats.roles import Role
@@ -22,20 +21,10 @@ class RoleRequiredMixin(PermissionRequiredMixin):
 
     # Get all of the Permissions required to access this view
     def get_permission_required(self):
-        # Assemble all of the Permissions related to the Roles
-        _role_perms = Permission.objects.none()
-        for role in self.get_role_required():
-            _role_perms = _role_perms & role.get_permissions()
-        perms = [perm.codename for perm in _role_perms]
-
-        # Have permissions be defined already?
-        try:
-            perms = perms + super(RoleRequiredMixin, self).get_permission_required()
-        except ImproperlyConfigured:
-            pass    # We can still have Roles
-
-        # Reassign the permissions to include new Role ones
-        self.permission_required = perms
+        # If the user has any Roles assigned to them, set permission_required = () so super doesn't error
+        if self.get_role_required():
+            if self.permission_required is None:
+                self.permission_required = ()
 
         return super(RoleRequiredMixin, self).get_permission_required()
 

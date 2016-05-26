@@ -31,12 +31,12 @@ class Role(six.with_metaclass(RoleMetaClass)):
     # Adds the specified permission(s) to the Role
     @classmethod
     def add_permissions(cls, *args):
-        cls.get_group().permissions.add(*args)
+        return cls.get_group().permissions.add(*args)
 
     # Adds the specified permission(s) to the Role
     @classmethod
     def remove_permissions(cls, *args):
-        cls.get_group().permissions.remove(*args)
+        return cls.get_group().permissions.remove(*args)
 
     # Returns True if the User is a member of this Role, else False
     @classmethod
