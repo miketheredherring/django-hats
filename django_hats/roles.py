@@ -64,3 +64,9 @@ class Role(six.with_metaclass(RoleMetaClass)):
     @classmethod
     def get_slug(cls):
         return (getattr(cls._meta, 'name', None) or cls.__name__).lower()
+
+
+class RoleFinder(object):
+    @staticmethod
+    def by_name(name):
+        return Bootstrapper._available_roles.get(name, None)
