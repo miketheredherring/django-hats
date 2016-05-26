@@ -5,6 +5,10 @@ class Scientist(Role):
     pass
 
 
+class GeneticCounselor(Role):
+    pass
+
+
 class BadlyNamedModel(Role):
     class Meta:
         name = 'GoodModelName'

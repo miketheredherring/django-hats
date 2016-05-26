@@ -19,7 +19,7 @@ class UtilTestCases(TestCase):
         permission_count = Permission.objects.count()
         Scientist._meta.name = '404'
         synchronize_roles()
-        self.assertEqual(Group.objects.count(), 2)
+        self.assertEqual(Group.objects.count(), 3)
         self.assertTrue(Group.objects.get(name__icontains=Scientist.get_slug()))
         self.assertRaises(Group.DoesNotExist, Group.objects.get, name__icontains='scientist')
         self.assertEqual(Permission.objects.count(), permission_count - 1)
