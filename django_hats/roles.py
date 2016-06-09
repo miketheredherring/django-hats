@@ -52,7 +52,7 @@ class Role(six.with_metaclass(RoleMetaClass)):
     # Returns the individual Group associated with this Role
     @classmethod
     def get_group(cls):
-        group, _ = Group.objects.get_or_create(name='_role_%s' % cls.get_slug())
+        group, _ = Group.objects.get_or_create(name='%s%s' % (Bootstrapper.prefix, cls.get_slug()))
         return group
 
     # Returns a list of Permissions associated with this Role
@@ -91,3 +91,11 @@ class RoleFinder(object):
     @staticmethod
     def by_name(name):
         return Bootstrapper._available_roles.get(name, None)
+
+    @staticmethod
+    def by_user(user):
+        roles = []
+        for g in user.groups.filter(name__istartswith=Bootstrapper.prefix):
+            roles.append(RoleFinder.by_name(g.name.replace(Bootstrapper.prefix, '')))
+
+        return roles

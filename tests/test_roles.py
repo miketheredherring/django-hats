@@ -4,6 +4,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
 from django.test import TestCase
 
+from django_hats.roles import RoleFinder
+
 from tests.roles import GeneticCounselor, Scientist
 
 # Assign the User model for shortcut purposes
@@ -74,3 +76,12 @@ class RoleTestCases(TestCase):
         call_command('synchronize_roles')
         perm = Permission.objects.get(codename='change_user')
         self.assertTrue(perm in Scientist.get_permissions())
+
+    # Tests `django_hats.roles.RoleFinder.by_user()`
+    def test_rolefinder_by_user(self):
+        user = User.objects.create(username='tester')
+        self.assertEqual(Scientist.get_users().count(), 0)
+        Scientist.assign(user)
+        self.assertEqual(RoleFinder.by_user(user)[0], Scientist)
+        self.assertEqual(len(RoleFinder.by_user(user)), 1)
+        Scientist.remove(user)

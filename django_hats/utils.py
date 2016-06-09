@@ -11,7 +11,7 @@ def cleanup_roles():
 
     # Get stale Roles
     stale_roles = Group.objects.filter(
-        name__istartswith='_role_'
+        name__istartswith=Bootstrapper.prefix
     ).exclude(
         id__in=[role.get_group().id for role in roles]
     )

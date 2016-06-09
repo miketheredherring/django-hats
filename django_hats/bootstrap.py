@@ -5,6 +5,7 @@ from django.conf import settings
 
 
 class Bootstrapper(object):
+    prefix = '_role_'
     _available_roles = {}
 
     @staticmethod

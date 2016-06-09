@@ -8,7 +8,7 @@ Role-based permissions system for Django. Everyone wears a different hat, some p
 Install with `pip`:
 
 ```
-pip install django-hats
+pip install git+git://github.com/GenePeeks/django-hats.git@v0.0.1
 ```
 
 Add `django_hats` to your `INSTALLED_APPS`:
