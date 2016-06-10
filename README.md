@@ -50,6 +50,24 @@ True
 False
 ```
 
+List users with a given role:
+
+```python
+>>> Scientist.get_users()
+[<User 'Mike Hearing'>, <User 'Scientist_1'>]
+```
+
+Retrieving roles pragmatically:
+
+```python
+>>> from django_hats.roles import RoleFinder
+...
+>>> RoleFinder.by_user(user)
+[<class 'Scientist'>, ]
+>>> RoleFinder.by_name('genetic_counselor')
+<class 'GeneticCounselor'>
+```
+
 Enforcing roles on the view:
 
 ```python
