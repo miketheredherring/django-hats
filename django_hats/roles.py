@@ -93,9 +93,13 @@ class RoleFinder(object):
         return Bootstrapper._available_roles.get(name, None)
 
     @staticmethod
+    def by_group(group):
+        return RoleFinder.by_name(group.name.replace(Bootstrapper.prefix, ''))
+
+    @staticmethod
     def by_user(user):
         roles = []
-        for g in user.groups.filter(name__istartswith=Bootstrapper.prefix):
-            roles.append(RoleFinder.by_name(g.name.replace(Bootstrapper.prefix, '')))
+        for group in user.groups.filter(name__istartswith=Bootstrapper.prefix):
+            roles.append(RoleFinder.by_group(group))
 
         return roles
