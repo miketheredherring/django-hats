@@ -32,3 +32,19 @@ class ManagementTestCases(TestCase):
         self.assertTrue(Group.objects.get(name__icontains=Scientist.get_slug()))
         self.assertEqual(Permission.objects.count(), permission_count)
         Scientist._meta.name = 'scientist'
+
+    # Tests `django_hats.utils.cleanup_roles()`
+    def test_cleanup_roles(self):
+        group = Scientist.get_group()
+        group.permissions.add(Permission.objects.create(codename='temporary', content_type=ContentType.objects.get_for_model(User)))
+        permission_count = Permission.objects.count()
+        Scientist._meta.name = '404'
+        call_command('synchronize_roles')
+        Scientist._meta.permissions = ()
+        call_command('cleanup_roles')
+        self.assertEqual(Group.objects.count(), 3)
+        self.assertTrue(Group.objects.get(name__icontains=Scientist.get_slug()))
+        self.assertRaises(Group.DoesNotExist, Group.objects.get, name__icontains='scientist')
+        self.assertEqual(Permission.objects.count(), permission_count)
+        Scientist._meta.name = 'scientist'
+        Scientist._meta.permissions = ('change_user', )

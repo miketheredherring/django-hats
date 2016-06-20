@@ -5,7 +5,7 @@ from django_hats.utils import synchronize_roles
 
 
 class Command(BaseCommand):
-    help = 'Removes stale Role Groups and Permissions from the database.'
+    help = 'Synchronizes Role Groups and Permissions with the database.'
 
     def handle(self, *args, **options):
         roles = Bootstrapper.get_roles()

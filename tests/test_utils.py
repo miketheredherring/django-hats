@@ -34,6 +34,12 @@ class UtilTestCases(TestCase):
         self.assertEqual(Group.objects.count(), 4)
         self.assertTrue(Group.objects.get(name__icontains=Scientist.get_slug()))
         self.assertEqual(Permission.objects.count(), permission_count)
+        _permissions = Scientist._meta.permissions
+        Scientist._meta.permissions = ()
+        synchronize_roles(roles)
+        self.assertEqual(Scientist.get_group().permissions.count(), 0)
+        Scientist._meta.permissions = _permissions
+        synchronize_roles(roles)
         Scientist._meta.name = 'scientist'
 
     # Tests `django_hats.utils.cleanup_roles()`

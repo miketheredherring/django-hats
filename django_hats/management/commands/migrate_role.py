@@ -31,3 +31,5 @@ class Command(BaseCommand):
         new_role = RoleFinder.by_name(snake_case(options['new']))
 
         migrate_role(old_role, new_role)
+
+        print 'Successfully migration %(old_role)s -> %(new_role)s' % {'old_role': old_role.__name__, 'new_role': new_role.__name__}

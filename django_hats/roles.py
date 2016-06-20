@@ -86,6 +86,13 @@ class Role(six.with_metaclass(RoleMetaClass)):
             *Permission.objects.filter(codename__in=cls._meta.permissions)
         )
 
+        perms_to_remove = []
+        # Check if a permission should be revoked for a group
+        for perm in cls.get_permissions():
+            if perm.codename not in cls._meta.permissions:
+                perms_to_remove.append(perm)
+        cls.remove_permissions(*perms_to_remove)
+
 
 class RoleFinder(object):
     @staticmethod
