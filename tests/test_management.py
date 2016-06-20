@@ -4,13 +4,23 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
 from django.test import TestCase
 
-from tests.roles import Scientist
+from tests.roles import GeneticCounselor, Scientist
 
 # Assign the User model for shortcut purposes
 User = get_user_model()
 
 
 class ManagementTestCases(TestCase):
+    # Tests `django_hats.management.commands.synchronize_roles`
+    def test_migrate_role(self):
+        user = User.objects.create(username='tester')
+        GeneticCounselor.assign(user)
+        self.assertEqual(GeneticCounselor.get_group().user_set.count(), 1)
+        self.assertEqual(Scientist.get_group().user_set.count(), 0)
+        call_command('migrate_role', old='GeneticCounselor', new='Scientist')
+        self.assertEqual(GeneticCounselor.get_group().user_set.count(), 0)
+        self.assertEqual(Scientist.get_group().user_set.count(), 1)
+
     # Tests `django_hats.management.commands.synchronize_roles`
     def test_synchronize_roles(self):
         group = Scientist.get_group()

@@ -61,17 +61,17 @@ class Role(six.with_metaclass(RoleMetaClass)):
         permissions = cls.get_group().permissions.all()
         return permissions
 
-    # Does the necessary assignment of Groups/Permissions to the User in question
+    # Does the necessary assignment of Groups/Permissions to the User(s) in question
     @classmethod
-    def assign(cls, user):
+    def assign(cls, *users):
         group = cls.get_group()
-        user.groups.add(group)
+        group.user_set.add(*users)
 
     # Does the necessary removal of Groups/Permissions to the User in question
     @classmethod
-    def remove(cls, user):
+    def remove(cls, *users):
         group = cls.get_group()
-        user.groups.remove(group)
+        group.user_set.remove(*users)
 
     # Returns a unique identifier for the Role name
     @classmethod

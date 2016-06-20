@@ -4,15 +4,25 @@ from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
 from django_hats.bootstrap import Bootstrapper
-from django_hats.utils import cleanup_roles, synchronize_roles
+from django_hats.utils import cleanup_roles, migrate_role, synchronize_roles
 
-from tests.roles import Scientist
+from tests.roles import GeneticCounselor, Scientist
 
 # Assign the User model for shortcut purposes
 User = get_user_model()
 
 
 class UtilTestCases(TestCase):
+    # Tests `django_hats.utils.migrate_role()`
+    def test_migrate_role(self):
+        user = User.objects.create(username='tester')
+        GeneticCounselor.assign(user)
+        self.assertEqual(GeneticCounselor.get_group().user_set.count(), 1)
+        self.assertEqual(Scientist.get_group().user_set.count(), 0)
+        migrate_role(GeneticCounselor, Scientist)
+        self.assertEqual(GeneticCounselor.get_group().user_set.count(), 0)
+        self.assertEqual(Scientist.get_group().user_set.count(), 1)
+
     # Tests `django_hats.utils.synchronize_roles()`
     def test_synchronize_roles(self):
         roles = Bootstrapper.get_roles()
