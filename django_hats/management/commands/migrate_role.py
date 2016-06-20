@@ -27,7 +27,6 @@ class Command(BaseCommand):
         self.new_role_name = None
 
     def handle(self, *args, **options):
-        print options
         old_role = RoleFinder.by_name(snake_case(options['old']))
         new_role = RoleFinder.by_name(snake_case(options['new']))
 

@@ -28,7 +28,7 @@ class ManagementTestCases(TestCase):
         permission_count = Permission.objects.count()
         Scientist._meta.name = '404'
         call_command('synchronize_roles')
-        self.assertEqual(Group.objects.count(), 3)
+        self.assertEqual(Group.objects.count(), 4)
         self.assertTrue(Group.objects.get(name__icontains=Scientist.get_slug()))
         self.assertEqual(Permission.objects.count(), permission_count)
         Scientist._meta.name = 'scientist'

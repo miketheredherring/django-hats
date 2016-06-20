@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from django_hats.bootstrap import Bootstrapper
-from django_hats.utils import cleanup_roles, synchronize_roles
+from django_hats.utils import synchronize_roles
 
 
 class Command(BaseCommand):
@@ -9,5 +9,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         roles = Bootstrapper.get_roles()
-        cleanup_roles()
         synchronize_roles(roles)
