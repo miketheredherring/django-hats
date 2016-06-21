@@ -3,12 +3,13 @@
 
 Role-based permissions system for Django. Everyone wears a different hat, some people wear multiple.
 
+
 ## Quick Start
 
 Install with `pip`:
 
 ```
-pip install git+git://github.com/GenePeeks/django-hats.git@v0.0.2
+pip install git+git://github.com/GenePeeks/django-hats.git@v0.1.1
 ```
 
 Add `django_hats` to your `INSTALLED_APPS`:
@@ -34,11 +35,12 @@ class GeneticCounselor(Role):
     pass
 ```
 
-Assigning roles to a user(works with custom user models):
+Assigning/removing roles for a user(works with custom user models):
 
 ```python
 >>> user = User.objects.first()
 >>> Scientist.assign(user)
+>>> Scientist.remove(user)
 ```
 
 Then checking if a user has a role:
@@ -114,8 +116,23 @@ template.html
 {% if roles.genetic_counselor %}NOTE: Class names are converted to snake_case if not specified in role.Meta.name{% endif %}
 ```
 
-Removing old roles/permissions from the database:
+
+## Management Commands
+
+Synchronize roles/permissions from the database:
 
 ```
 python manage.py synchronize_roles
+```
+
+Migrate a role which the class name/name has changed:
+
+```
+python manage.py migrate_role --old=OldRoleClass --new=NewRoleClass
+```
+
+Remove old roles/permissions from the database(only post migration if a name change occured):
+
+```
+python manage.py cleanup_roles
 ```

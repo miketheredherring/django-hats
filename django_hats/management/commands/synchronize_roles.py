@@ -10,3 +10,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         roles = Bootstrapper.get_roles()
         synchronize_roles(roles)
+
+        print 'Role synchronization complete.'

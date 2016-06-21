@@ -107,6 +107,8 @@ class RoleFinder(object):
     def by_user(user):
         roles = []
         for group in user.groups.filter(name__istartswith=Bootstrapper.prefix):
-            roles.append(RoleFinder.by_group(group))
+            role = RoleFinder.by_group(group)
+            if role is not None:
+                roles.append(role)
 
         return roles
