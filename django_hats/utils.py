@@ -6,13 +6,13 @@ from django.contrib.contenttypes.models import ContentType
 from django_hats.bootstrap import Bootstrapper
 
 
-def migrate_role(old_role, new_role):
+def migrate_role(old_group, new_role):
     # Get all the users for the old role
-    users = old_role.get_group().user_set.all()
+    users = old_group.user_set.all()
 
     # Add the new role first, then remove the old one
     new_role.assign(*users)
-    old_role.remove(*users)
+    old_group.user_set.remove(*users)
 
 
 def cleanup_roles():

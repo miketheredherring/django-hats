@@ -19,7 +19,7 @@ class UtilTestCases(TestCase):
         GeneticCounselor.assign(user)
         self.assertEqual(GeneticCounselor.get_group().user_set.count(), 1)
         self.assertEqual(Scientist.get_group().user_set.count(), 0)
-        migrate_role(GeneticCounselor, Scientist)
+        migrate_role(GeneticCounselor.get_group(), Scientist)
         self.assertEqual(GeneticCounselor.get_group().user_set.count(), 0)
         self.assertEqual(Scientist.get_group().user_set.count(), 1)
 
