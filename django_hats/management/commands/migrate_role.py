@@ -14,19 +14,14 @@ class Command(BaseCommand):
         make_option('-o', '--old',
                     action='store',
                     type='string',
-                    dest='old_role_name',
+                    dest='old',
                     help='Old Role Class Name, required'),
         make_option('-n', '--new',
                     action='store',
                     type='string',
-                    dest='new_role_name',
+                    dest='new',
                     help='New Role Class Name, required'),
     )
-
-    def __init__(self):
-        super(Command, self).__init__()
-        self.old_role_name = None
-        self.new_role_name = None
 
     def handle(self, *args, **options):
         old_role = RoleFinder.by_name(snake_case(options['old']))
