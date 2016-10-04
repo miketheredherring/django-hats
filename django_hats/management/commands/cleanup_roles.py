@@ -9,4 +9,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ret = cleanup_roles()
 
-        print '%(count)s roles removed' % {'count': ret[0]}
+        if options.get('verbosity') > 0:
+            print '%(count)s roles removed' % {'count': ret[0]}

@@ -11,4 +11,5 @@ class Command(BaseCommand):
         roles = Bootstrapper.get_roles()
         synchronize_roles(roles)
 
-        print 'Role synchronization complete.'
+        if options.get('verbosity') > 0:
+            print 'Role synchronization complete.'

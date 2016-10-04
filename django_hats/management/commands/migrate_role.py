@@ -35,4 +35,5 @@ class Command(BaseCommand):
 
         migrate_role(old_group, new_role)
 
-        print 'Successfully migration %(old_role)s -> %(new_role)s' % {'old_role': options['old'], 'new_role': options['new']}
+        if options.get('verbosity') > 0:
+            print 'Successfully migration %(old_role)s -> %(new_role)s' % {'old_role': options['old'], 'new_role': options['new']}
