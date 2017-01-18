@@ -24,6 +24,9 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
+        self.verbosity = options.get('verbosity')
+
+        # Identifiy the two roles
         old_role = RoleFinder.by_name(snake_case(options['old']))
         new_role = RoleFinder.by_name(snake_case(options['new']))
 
@@ -35,5 +38,11 @@ class Command(BaseCommand):
 
         migrate_role(old_group, new_role)
 
-        if options.get('verbosity') > 0:
-            print 'Successfully migration %(old_role)s -> %(new_role)s' % {'old_role': options['old'], 'new_role': options['new']}
+        # Print out useful completion text
+        if self.verbosity > 0:
+            self.stdout.write(
+                'Successfully migration %(old_role)s -> %(new_role)s' % {
+                    'old_role': options['old'],
+                    'new_role': options['new']
+                }
+            )
