@@ -16,6 +16,11 @@ class Command(BaseCommand):
         roles = Bootstrapper.get_roles()
         synchronize_roles(roles)
 
+        # Emit the post-signal for apps to hook
+        post_synchronize_roles.send(
+            sender=DjangoHatsConfig
+        )
+
         # Print out useful completion text
         if self.verbosity > 0:
             self.stdout.write('Role synchronization complete.')
