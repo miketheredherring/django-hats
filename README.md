@@ -42,6 +42,7 @@ Pragmatically assigning/removing/viewing `Permission` to role:
 >>> GeneticCounselor.remove_permissions(perm_3)
 >>> Scientist.get_permissions()
 [<Permission 'change_subject'>, <Permission 'change_specimen'>]
+```
 
 Assigning/removing roles for a user(works with custom user models):
 
