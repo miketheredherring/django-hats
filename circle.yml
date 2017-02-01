@@ -1,12 +1,11 @@
 machine:
   post:
-    - pyenv global 2.7.10 3.5.2
-  python:
-    version: pypy-3.5.2
+    - pyenv install 3.5.1
+    - pyenv global 2.7.10 3.5.1
 
 dependencies:
   override:
-    - pip install tox
+    - pip install tox tox-pyenv
     - pip install coveralls
 
 test:
