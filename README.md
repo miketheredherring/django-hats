@@ -9,7 +9,7 @@ Role-based permissions system for Django. Everyone wears a different hat, some p
 Install with `pip`:
 
 ```
-pip install git+git://github.com/GenePeeks/django-hats.git@v1.0.0
+pip install git+git://github.com/GenePeeks/django-hats.git@v1.1.0
 ```
 
 Add `django_hats` to your `INSTALLED_APPS`:
@@ -101,14 +101,6 @@ class ProtectedGeneticFiles(RoleRequiredMixin, TemplateView):
     template_name = 'template.html'
 ```
 
-Checking roles in the template with filter tag:
-
-```
-{% load roles %}
-
-{% if user|has_role:'scientist' or user|has_role:genetic_counselor_role %}PROTECTED CONTENT!{% endif %}
-```
-
 Checking roles in the template like permissions:
 
 settings.py
@@ -127,6 +119,13 @@ template.html
 {% if roles.genetic_counselor %}NOTE: Class names are converted to snake_case if not specified in role.Meta.name{% endif %}
 ```
 
+Checking roles in the template with filter tag:
+
+```
+{% load roles %}
+
+{% if user|has_role:'scientist' or user|has_role:genetic_counselor_role %}PROTECTED CONTENT!{% endif %}
+```
 
 ## Management Commands
 
