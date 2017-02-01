@@ -37,17 +37,20 @@ setup(
     install_requires=[
         'django>=1.9.0',
     ],
-    url='',
+    url='https://github.com/GenePeeks/django-hats',
     author='Mike Hearing',
     author_email='mhearing@genepeeks.com',
     classifiers=[
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
+        'Framework :: Django',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.5',
-        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Security',
+        'Topic :: Software Development :: Libraries :: Application Frameworks'
     ],
 )
