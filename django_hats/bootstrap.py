@@ -1,5 +1,6 @@
 from importlib import import_module
 import os
+import six
 
 from django.conf import settings
 
@@ -38,4 +39,4 @@ class Bootstrapper(object):
     # Returns a list of available Roles
     @classmethod
     def get_roles(cls):
-        return [klass for key, klass in cls._available_roles.iteritems()]
+        return [klass for key, klass in six.iteritems(cls._available_roles)]
