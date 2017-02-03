@@ -1,5 +1,6 @@
 # django-hats
 [![Coverage Status](https://coveralls.io/repos/github/GenePeeks/django-hats/badge.svg?branch=master)](https://coveralls.io/github/GenePeeks/django-hats?branch=master)
+[![PyPI](https://img.shields.io/pypi/pyversions/django-hats.svg)]()
 
 Role-based permissions system for Django. Everyone wears a different hat, some people wear multiple.
 
@@ -39,6 +40,16 @@ class Scientist(Role):
 class GeneticCounselor(Role):
     pass
 ```
+
+Synchronize your database with defined roles:
+
+```
+python manage.py synchronize_roles
+```
+
+You're ready to go! Start defining permissions and securing your application!
+
+## Working with roles
 
 Pragmatically assigning/removing/viewing `Permission` to role:
 
@@ -86,6 +97,8 @@ Retrieving roles pragmatically:
 <class 'Scientist'>
 ```
 
+## Mixins
+
 Enforcing roles on the view:
 
 ```python
@@ -100,13 +113,16 @@ class ProtectedGeneticReport(RoleRequiredMixin, TemplateView):
 
 
 class ProtectedGeneticFiles(RoleRequiredMixin, TemplateView):
-    # Works with existing Django PermissionRequiredMixin
+    # Works with existing Django `PermissionRequiredMixin`
     permission_required = ('change_subject', 'change_specimen')
     role_required = (GeneticCounselor, Scientist)
     template_name = 'template.html'
 ```
 
-Checking roles in the template like permissions:
+## Templates
+
+Checking roles in the template like permissions:  
+**NOTE**: This is the reccomended way to check for roles in the template
 
 settings.py
 ```
@@ -124,13 +140,20 @@ template.html
 {% if roles.genetic_counselor %}NOTE: Class names are converted to snake_case if not specified in role.Meta.name{% endif %}
 ```
 
-Checking roles in the template with filter tag:
+Checking roles in the template with filter tag:  
+**NOTE**: This works without the context processor, and is not required when using the context processor, if thats your thing
 
 ```
 {% load roles %}
 
 {% if user|has_role:'scientist' or user|has_role:genetic_counselor_role %}PROTECTED CONTENT!{% endif %}
 ```
+
+## Signals
+
+#### post_synchronize_roles
+- `sender`: django-hats `AppConfig`
+
 
 ## Management Commands
 
