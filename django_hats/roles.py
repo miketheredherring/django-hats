@@ -97,18 +97,23 @@ class Role(six.with_metaclass(RoleMetaClass)):
 class RoleFinder(object):
     @staticmethod
     def by_name(name):
+        '''Returns single `Role` where snake case name matches the given string `name`.
+        '''
         return Bootstrapper._available_roles.get(name, None)
 
     @staticmethod
     def by_group(group):
+        '''Returns single `Role` which `group` corresponds with.
+        '''
         return RoleFinder.by_name(group.name.replace(Bootstrapper.prefix, ''))
 
     @staticmethod
     def by_user(user):
+        '''Returns list of `Roles` which belong to a given `User`.
+        '''
         roles = []
         for group in user.groups.filter(name__istartswith=Bootstrapper.prefix):
             role = RoleFinder.by_group(group)
             if role is not None:
                 roles.append(role)
-
         return roles
