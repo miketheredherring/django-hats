@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
-from django.test import TestCase
 
 from django_hats.mixins import RoleRequiredMixin
 
+from tests import RolesTestCase
 from tests.roles import Scientist
 
 
@@ -11,7 +11,7 @@ class Object(object):
     pass
 
 
-class MixinTestCases(TestCase):
+class MixinTestCases(RolesTestCase):
     # Tests `django_hats.mixins.RoleRequiredMixin.get_role_required()`
     def test_get_role_required(self):
         mixin = RoleRequiredMixin()

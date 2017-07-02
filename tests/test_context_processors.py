@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory
 
 from django_hats.context_processors import roles
 
+from tests import RolesTestCase
 from tests.roles import Scientist
 
 
-class TemplateTageTestCases(TestCase):
+class TemplateTageTestCases(RolesTestCase):
     # Tests `django_hats.templatetags.roles.roles`
     def test_roles_user(self):
         user = User.objects.create(username='tester')

@@ -1,7 +1,6 @@
-from django.test import TestCase
-
 from django_hats.bootstrap import Bootstrapper
 
+from tests import RolesTestCase
 from tests.roles import Scientist, BadlyNamedModel
 
 
@@ -11,7 +10,7 @@ class BadRole(object):
         return 'scientist'
 
 
-class BootstrapTestCases(TestCase):
+class BootstrapTestCases(RolesTestCase):
     def test_register(self):
         roles = Bootstrapper.get_roles()
         expected_roles = [Scientist, BadlyNamedModel]

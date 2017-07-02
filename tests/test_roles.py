@@ -2,10 +2,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
-from django.test import TestCase
 
 from django_hats.roles import RoleFinder
 
+from tests import RolesTestCase
 from tests.roles import GeneticCounselor, Scientist
 
 # Assign the User model for shortcut purposes
@@ -18,7 +18,7 @@ class BadRole(object):
         return 'scientist'
 
 
-class RoleTestCases(TestCase):
+class RoleTestCases(RolesTestCase):
     # Tests `django_hats.roles.Role.get_group()`
     def test_get_group(self):
         self.assertEqual(Scientist.get_group().name, '_role_scientist')

@@ -1,18 +1,18 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
 
 from django_hats.bootstrap import Bootstrapper
 from django_hats.utils import cleanup_roles, migrate_role, synchronize_roles
 
+from tests import RolesTestCase
 from tests.roles import GeneticCounselor, Scientist
 
 # Assign the User model for shortcut purposes
 User = get_user_model()
 
 
-class UtilTestCases(TestCase):
+class UtilTestCases(RolesTestCase):
     # Tests `django_hats.utils.migrate_role()`
     def test_migrate_role(self):
         user = User.objects.create(username='tester')
@@ -29,6 +29,7 @@ class UtilTestCases(TestCase):
         group = Scientist.get_group()
         group.permissions.add(Permission.objects.create(codename='temporary', content_type=ContentType.objects.get_for_model(User)))
         permission_count = Permission.objects.count()
+        Scientist.group = None
         Scientist._meta.name = '404'
         synchronize_roles(roles)
         self.assertEqual(Group.objects.count(), 4)
@@ -48,6 +49,7 @@ class UtilTestCases(TestCase):
         group = Scientist.get_group()
         group.permissions.add(Permission.objects.create(codename='temporary', content_type=ContentType.objects.get_for_model(User)))
         permission_count = Permission.objects.count()
+        Scientist.group = None
         Scientist._meta.name = '404'
         synchronize_roles(roles)
         Scientist._meta.permissions = ()

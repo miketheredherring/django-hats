@@ -28,6 +28,9 @@ class RoleMetaClass(type):
 
 
 class Role(six.with_metaclass(RoleMetaClass)):
+    # Provides default value pre-momoization
+    group = None
+
     # Adds the specified permission(s) to the Role
     @classmethod
     def add_permissions(cls, *args):
@@ -52,8 +55,9 @@ class Role(six.with_metaclass(RoleMetaClass)):
     # Returns the individual Group associated with this Role
     @classmethod
     def get_group(cls):
-        group, _ = Group.objects.get_or_create(name='%s%s' % (Bootstrapper.prefix, cls.get_slug()))
-        return group
+        if cls.group is None:
+            cls.group, _ = Group.objects.get_or_create(name='%s%s' % (Bootstrapper.prefix, cls.get_slug()))
+        return cls.group
 
     # Returns a list of Permissions associated with this Role
     @classmethod
