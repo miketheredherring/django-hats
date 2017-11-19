@@ -6,6 +6,22 @@ from django.contrib.contenttypes.models import ContentType
 from django_hats.bootstrap import Bootstrapper
 
 
+def check_membership(user, roles, any=False):
+    '''Returns membership of all/any of the specified roles for a given `User`.
+    '''
+    try:
+        roles = iter(roles)
+    except TypeError:
+        roles = [roles, ]
+
+    # Assemble a more efficient query that checking role-by-role
+    slugs = ['%s%s' % (Bootstrapper.prefix, role.get_slug()) for role in roles]
+    queryset = user.groups.filter(name__in=slugs)
+    if any is False:
+        return queryset.count() == len(slugs)
+    return queryset.exists()
+
+
 def migrate_role(old_group, new_role):
     # Get all the users for the old role
     users = old_group.user_set.all()

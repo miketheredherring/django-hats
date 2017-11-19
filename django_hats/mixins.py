@@ -2,11 +2,13 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
 
 from django_hats.roles import Role
+from django_hats.utils import check_membership
 
 
 # Checks if the defined `role_required` field is met or not
 class RoleRequiredMixin(PermissionRequiredMixin):
     role_required = None
+    role_required_any = False
 
     # Check if the User has all the necessary Permissions and is a member of the Role
     def has_permission(self):
@@ -15,8 +17,7 @@ class RoleRequiredMixin(PermissionRequiredMixin):
 
         # Make sure the User belongs to all the mentioned Roles
         ret = super(RoleRequiredMixin, self).has_permission()
-        for role in roles:
-            ret &= role.check_membership(user)
+        ret &= check_membership(user, roles, any=self.role_required_any)
         return ret
 
     # Get all of the Permissions required to access this view

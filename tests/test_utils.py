@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
 from django_hats.bootstrap import Bootstrapper
-from django_hats.utils import cleanup_roles, migrate_role, synchronize_roles
+from django_hats.utils import check_membership, cleanup_roles, migrate_role, synchronize_roles
 
 from tests import RolesTestCase
 from tests.roles import GeneticCounselor, Scientist
@@ -13,6 +13,16 @@ User = get_user_model()
 
 
 class UtilTestCases(RolesTestCase):
+    # Tests `django_hats.utils.check_membership()`
+    def test_check_membership(self):
+        user = User.objects.create(username='tester')
+        GeneticCounselor.assign(user)
+        user.refresh_from_db()
+        # Assert the `any` argument works
+        self.assertTrue(check_membership(user, GeneticCounselor))
+        self.assertFalse(check_membership(user, (GeneticCounselor, Scientist)))
+        self.assertTrue(check_membership(user, [GeneticCounselor, Scientist], any=True))
+
     # Tests `django_hats.utils.migrate_role()`
     def test_migrate_role(self):
         user = User.objects.create(username='tester')
