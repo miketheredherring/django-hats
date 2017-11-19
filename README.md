@@ -4,6 +4,7 @@
 
 Role-based permissions system for Django. Everyone wears a different hat, some people wear multiple.
 
+In a nutshell, django-hats is a reusable app, which doesn't try to re-invent the wheel by having Django Groups as its foundation. It provides a compact collection of easy to use patterns/utilities for role, and permission, based checks in CBVs and templates. They have the advantages of being: pragmatically defined, performant, clear syntax, and are well tested/documented!
 
 ## Quick Start
 
