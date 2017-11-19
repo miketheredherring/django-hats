@@ -6,7 +6,6 @@ machine:
 dependencies:
   override:
     - pip install tox tox-pyenv
-    - pip install coveralls
 
 test:
   override:
