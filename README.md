@@ -68,13 +68,20 @@ Assigning/removing roles for a user(works with custom user models):
 >>> Scientist.remove(user)
 ```
 
-Then checking if a user has a role:
+Then checking if a user has a role, or multiple roles:
 
 ```python
+>>> from django_hats.utils import check_membership
 >>> Scientist.check_membership(user)
 True
 >>> GeneticCounselor.check_membership(user)
 False
+>>> check_membership(user, Scientist)
+True
+>>> check_membership(user, [Scientist, GeneticCounselor])
+False
+>>> check_membership(user, [Scientist, GeneticCounselor], any=True)
+True
 ```
 
 List users with a given role:
@@ -116,6 +123,7 @@ class ProtectedGeneticFiles(RoleRequiredMixin, TemplateView):
     # Works with existing Django `PermissionRequiredMixin`
     permission_required = ('change_subject', 'change_specimen')
     role_required = (GeneticCounselor, Scientist)
+    role_required_any = True
     template_name = 'template.html'
 ```
 
