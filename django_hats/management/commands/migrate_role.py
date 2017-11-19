@@ -1,5 +1,3 @@
-from optparse import make_option
-
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand
 
@@ -10,18 +8,24 @@ from django_hats.utils import migrate_role, snake_case
 
 class Command(BaseCommand):
     help = 'Migrate one role to another in the database.'
-    option_list = BaseCommand.option_list + (
-        make_option('-o', '--old',
-                    action='store',
-                    type='string',
-                    dest='old',
-                    help='Old Role Class Name, required'),
-        make_option('-n', '--new',
-                    action='store',
-                    type='string',
-                    dest='new',
-                    help='New Role Class Name, required'),
-    )
+
+    def add_arguments(self, parser):
+        '''Adds command line argument options.
+        '''
+        parser.add_argument(
+            '-o', '--old',
+            action='store',
+            type=str,
+            dest='old',
+            help='Old Role Class Name, required'
+        )
+        parser.add_argument(
+            '-n', '--new',
+            action='store',
+            type=str,
+            dest='new',
+            help='New Role Class Name, required'
+        )
 
     def handle(self, *args, **options):
         self.verbosity = options.get('verbosity')
