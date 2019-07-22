@@ -16,7 +16,7 @@ pip install django-hats
 
 Or, getting the latest build:
 ```
-pip install git+git://github.com/GenePeeks/django-hats.git@master
+pip install git+git://github.com/miketheredherring/django-hats.git@master
 ```
 
 Add `django_hats` to your `INSTALLED_APPS`:
